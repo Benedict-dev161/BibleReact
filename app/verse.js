@@ -1,4 +1,4 @@
-// VerseScreen.js
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Alert,
@@ -12,10 +12,18 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getChapter } from "../utils/bibleApi";
 
-export default function VerseScreen({ route, navigation }) {
-  const { reference, verses, bookKey, chapter } = route.params;
-  const [currentChapter, setCurrentChapter] = useState(chapter || 1);
-  const [localVerses, setLocalVerses] = useState(verses);
+export default function VerseScreen() {
+  const router = useRouter();
+
+  const params = useLocalSearchParams();
+  const { reference, verses, bookKey, chapter } = params;
+
+  const parsedVerses = verses ? JSON.parse(verses) : [];
+
+  const [currentChapter, setCurrentChapter] = useState(
+    chapter ? parseInt(chapter, 10) : 1,
+  );
+  const [localVerses, setLocalVerses] = useState(parsedVerses);
   const [jumpChapter, setJumpChapter] = useState("");
 
   const loadChapter = async (targetChapter) => {
@@ -46,6 +54,10 @@ export default function VerseScreen({ route, navigation }) {
     loadChapter(num);
   };
 
+  const displayReference = reference
+    ? `${reference.split(" ")[0]} ${currentChapter}`
+    : `Chapter ${currentChapter}`;
+
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.root}>
@@ -53,7 +65,7 @@ export default function VerseScreen({ route, navigation }) {
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backBtn}
-            onPress={() => navigation.goBack()}
+            onPress={() => router.back()}
             activeOpacity={0.7}
           >
             <Text style={styles.backIcon}>‹</Text>
@@ -61,7 +73,7 @@ export default function VerseScreen({ route, navigation }) {
           </TouchableOpacity>
 
           <Text numberOfLines={1} style={styles.headerTitle}>
-            {`${reference.split(" ")[0]} ${currentChapter}`}
+            {displayReference}
           </Text>
 
           <View style={styles.rightPlaceholder} />
@@ -155,7 +167,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: "#f5f5f5",
-    borderTopWidth: 1, // Ditambahkan sedikit modifikasi logis agar ada pembatas dengan teks di atasnya (dulu borderBottom)
+    borderTopWidth: 1,
     borderTopColor: "#e0e0e0",
   },
   navRow: {
