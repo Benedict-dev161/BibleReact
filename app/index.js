@@ -1,10 +1,14 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 import BookList from "../components/BookList";
 import { getChapter } from "../utils/bibleApi";
 
 export default function HomeScreen() {
-  const router = useRouter(); 
+  const router = useRouter();
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSelectBook = async (bookKey, chapter) => {
     const data = await getChapter(bookKey, chapter);
@@ -24,11 +28,55 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <BookList onSelectBook={handleSelectBook} />
+      {/* Area Search Bar */}
+      <View style={styles.searchContainer}>
+        <Ionicons
+          name="search"
+          size={20}
+          color="#888"
+          style={styles.searchIcon}
+        />
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Cari kitab (contoh: Genesis, John)..."
+          placeholderTextColor="#999"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          autoCorrect={false}
+          clearButtonMode="while-editing"
+        />
+      </View>
+
+      {/* Daftar Kitab */}
+      <BookList onSelectBook={handleSelectBook} searchQuery={searchQuery} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f5f5f5" },
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "white",
+    marginHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 8,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
+    height: 48,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: "#333",
+  },
 });
