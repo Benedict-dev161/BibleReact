@@ -67,7 +67,20 @@ export default function VerseScreen({ route, navigation }) {
           <View style={styles.rightPlaceholder} />
         </View>
 
-        {/* Kontrol pasal */}
+        {/* Isi ayat diletakkan di atas navigasi */}
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {localVerses.map((v, idx) => (
+            <View key={idx.toString()} style={styles.verseRow}>
+              <Text style={styles.verseNum}>{v.verse}</Text>
+              <Text style={styles.verseText}>{v.text}</Text>
+            </View>
+          ))}
+        </ScrollView>
+
+        {/* Kontrol pasal dipindah ke bawah */}
         <View style={styles.chapterBar}>
           <View style={styles.navRow}>
             <TouchableOpacity
@@ -79,7 +92,7 @@ export default function VerseScreen({ route, navigation }) {
               }}
               activeOpacity={0.8}
             >
-              <Text style={styles.navText}>‹ Sebelumnya</Text>
+              <Text style={styles.navText}>‹ Previous</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -87,7 +100,7 @@ export default function VerseScreen({ route, navigation }) {
               onPress={handleNextChapter}
               activeOpacity={0.8}
             >
-              <Text style={styles.navText}>Berikutnya ›</Text>
+              <Text style={styles.navText}>Next›</Text>
             </TouchableOpacity>
           </View>
 
@@ -104,19 +117,6 @@ export default function VerseScreen({ route, navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* Isi ayat */}
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.scrollContent}
-        >
-          {localVerses.map((v, idx) => (
-            <View key={idx.toString()} style={styles.verseRow}>
-              <Text style={styles.verseNum}>{v.verse}</Text>
-              <Text style={styles.verseText}>{v.text}</Text>
-            </View>
-          ))}
-        </ScrollView>
       </View>
     </SafeAreaView>
   );
@@ -155,8 +155,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     backgroundColor: "#f5f5f5",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderTopWidth: 1, // Ditambahkan sedikit modifikasi logis agar ada pembatas dengan teks di atasnya (dulu borderBottom)
+    borderTopColor: "#e0e0e0",
   },
   navRow: {
     flexDirection: "row",
