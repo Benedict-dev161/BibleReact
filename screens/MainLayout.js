@@ -1,13 +1,33 @@
 // screens/MainLayout.js
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MainLayout({ children, navigation, active }) {
+  // Setup animasi transisi
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300, // Kecepatan transisi dalam milidetik
+      useNativeDriver: true,
+    }).start();
+  }, [fadeAnim]);
+
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
       <View style={styles.container}>
-        <View style={styles.content}>{children}</View>
+        {/* Konten dibungkus Animated.View agar ada transisi */}
+        <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
+          {children}
+        </Animated.View>
 
         <View style={styles.bottomBar}>
           <TouchableOpacity
@@ -37,6 +57,24 @@ export default function MainLayout({ children, navigation, active }) {
               Search
             </Text>
           </TouchableOpacity>
+
+          {/* Kategori Baru: Reflections */}
+          <TouchableOpacity
+            style={[
+              styles.bottomBtn,
+              active === "Reflections" && styles.activeBtn,
+            ]}
+            onPress={() => navigation.navigate("Reflections")}
+          >
+            <Text
+              style={[
+                styles.bottomLabel,
+                active === "Reflections" && styles.activeLabel,
+              ]}
+            >
+              Reflections
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
@@ -59,7 +97,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopWidth: 1,
     borderTopColor: "#ddd",
-    paddingBottom: 4, // extra jarak dari gesture bar
+    paddingBottom: 4,
     paddingTop: 4,
   },
   bottomBtn: {
