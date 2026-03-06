@@ -54,9 +54,14 @@ export default function VerseScreen() {
     loadChapter(num);
   };
 
-  const displayReference = reference
-    ? `${reference.split(" ")[0]} ${currentChapter}`
-    : `Chapter ${currentChapter}`;
+  let displayReference = `Chapter ${currentChapter}`;
+  if (reference) {
+    const parts = reference.split(" ");
+    parts.pop();
+    const bookName = parts.join(" ");
+    displayReference = `${bookName} ${currentChapter}`;
+  }
+
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
@@ -229,4 +234,5 @@ const styles = StyleSheet.create({
   verseNum: { width: 32, fontWeight: "bold", color: "#007AFF" },
   verseText: { flex: 1, fontSize: 16, lineHeight: 24 },
 });
+
 
