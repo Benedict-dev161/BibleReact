@@ -1,7 +1,6 @@
 // app/streak.js
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function StreakScreen() {
   return (
@@ -9,7 +8,8 @@ export default function StreakScreen() {
       <Ionicons name="flame" size={80} color="#FF9500" />
       <Text style={styles.title}>Your Reading Streak</Text>
       <Text style={styles.subtitle}>
-        You haven't started your streak yet! Read a devotional today to light the fire.
+        You haven't started your streak yet! Read a devotional today to light
+        the fire.
       </Text>
     </View>
   );
