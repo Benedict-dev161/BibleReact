@@ -59,8 +59,28 @@ export default function RootLayout() {
         }}
       />
 
+      {/* Tab 4: Fitur Streak yang Benar */}
+      <Tabs.Screen
+        name="streak"
+        options={{
+          title: "Streak",
+          tabBarLabel: "Streak",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="flame-outline" size={size} color={color} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="verse"
+        options={{
+          href: null,
+        }}
+      />
+
+      {}
+      <Tabs.Screen
+        name="(tabs)"
         options={{
           href: null,
         }}
