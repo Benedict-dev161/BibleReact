@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
@@ -7,10 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MainLayout from "../screens/MainLayout";
 import { getVerse } from "../utils/bibleApi";
 
-export default function SearchScreen({ navigation }) {
+export default function SearchScreen() {
+  const router = useRouter();
   const [book, setBook] = useState("");
   const [chapter, setChapter] = useState("");
   const [verse, setVerse] = useState("");
@@ -32,70 +33,69 @@ export default function SearchScreen({ navigation }) {
       return;
     }
 
-    // Normalisasi supaya selalu punya verses[]
     const versesArray = data.verses
       ? data.verses
       : [{ verse: data.verse || 1, text: data.text }];
 
     const safeReference = data.reference || ref;
 
-    // Sederhanakan bookKey & chapter untuk VerseScreen
     const [bookKeyRaw, chapterRaw] = ref.split(" ");
     const bookKey = bookKeyRaw.toLowerCase();
     const chapterNum = parseInt(chapterRaw, 10);
 
-    navigation.navigate("Verse", {
-      reference: safeReference,
-      verses: versesArray,
-      bookKey,
-      chapter: chapterNum,
+    router.push({
+      pathname: "/verse",
+      params: {
+        reference: safeReference,
+        verses: JSON.stringify(versesArray),
+        bookKey: bookKey,
+        chapter: chapterNum,
+      },
     });
   };
 
   return (
-    <MainLayout navigation={navigation} active="Search">
-      <View style={styles.container}>
-        <Text style={styles.title}>Cari Ayat / Pasal</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Cari Ayat / Pasal</Text>
 
-        <Text style={styles.label}>Buku</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="example: john, genesis, psalms"
-          value={book}
-          onChangeText={setBook}
-          autoCapitalize="none"
-        />
+      <Text style={styles.label}>Buku</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="example: john, genesis, psalms"
+        value={book}
+        onChangeText={setBook}
+        autoCapitalize="none"
+      />
 
-        <View style={styles.row}>
-          <View style={styles.column}>
-            <Text style={styles.label}>Pasal</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="example: 2"
-              keyboardType="numeric"
-              value={chapter}
-              onChangeText={setChapter}
-            />
-          </View>
-
-          <View style={styles.spacer} />
-
-          <View style={styles.column}>
-            <Text style={styles.label}>Ayat</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="example: 1-2 or 16"
-              value={verse}
-              onChangeText={setVerse}
-            />
-          </View>
+      <View style={styles.row}>
+        <View style={styles.column}>
+          <Text style={styles.label}>Pasal</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="example: 2"
+            keyboardType="numeric"
+            value={chapter}
+            onChangeText={setChapter}
+          />
         </View>
 
-        <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
-          <Text style={styles.searchBtnText}>OK</Text>
-        </TouchableOpacity>
+        <View style={styles.spacer} />
+
+        <View style={styles.column}>
+          <Text style={styles.label}>Ayat</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="example: 1-2 or 16"
+            value={verse}
+            onChangeText={setVerse}
+          />
+        </View>
       </View>
-    </MainLayout>
+
+      <TouchableOpacity style={styles.searchBtn} onPress={handleSearch}>
+        <Text style={styles.searchBtnText}>OK</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
