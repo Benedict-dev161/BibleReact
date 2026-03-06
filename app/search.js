@@ -17,32 +17,36 @@ export default function SearchScreen() {
   const [verse, setVerse] = useState("");
 
   const handleSearch = async () => {
+    // 1. Validasi Input
     if (!book.trim() || !chapter.trim()) {
-      Alert.alert("Error", "Please fill at least Book and Chapter.");
+      Alert.alert("Error", "Buku dan Pasal harus diisi.");
       return;
     }
 
+    // 2. Gabungkan HANYA untuk kebutuhan query API
     const ref = verse.trim()
       ? `${book.trim()} ${chapter.trim()}:${verse.trim()}`
       : `${book.trim()} ${chapter.trim()}`;
 
+    // 3. Panggil API
     const data = await getVerse(ref);
 
     if (!data || (!data.verses && !data.text)) {
-      Alert.alert("Error", "Verse or chapter not found.");
+      Alert.alert("Error", "Ayat atau pasal tidak ditemukan.");
       return;
     }
 
+    // 4. Normalisasi data dari API
     const versesArray = data.verses
       ? data.verses
       : [{ verse: data.verse || 1, text: data.text }];
 
     const safeReference = data.reference || ref;
 
-    const [bookKeyRaw, chapterRaw] = ref.split(" ");
-    const bookKey = bookKeyRaw.toLowerCase();
-    const chapterNum = parseInt(chapterRaw, 10);
+    const bookKey = book.trim().toLowerCase().replace(/\s+/g, "");
+    const chapterNum = parseInt(chapter.trim(), 10);
 
+    // 5. Navigasi ke halaman Verse
     router.push({
       pathname: "/verse",
       params: {
@@ -56,9 +60,9 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Cari Ayat / Pasal</Text>
+      <Text style={styles.title}>Search</Text>
 
-      <Text style={styles.label}>Buku</Text>
+      <Text style={styles.label}>Book</Text>
       <TextInput
         style={styles.input}
         placeholder="example: john, genesis, psalms"
@@ -69,7 +73,7 @@ export default function SearchScreen() {
 
       <View style={styles.row}>
         <View style={styles.column}>
-          <Text style={styles.label}>Pasal</Text>
+          <Text style={styles.label}>Chapter</Text>
           <TextInput
             style={styles.input}
             placeholder="example: 2"
@@ -82,7 +86,7 @@ export default function SearchScreen() {
         <View style={styles.spacer} />
 
         <View style={styles.column}>
-          <Text style={styles.label}>Ayat</Text>
+          <Text style={styles.label}>Verse</Text>
           <TextInput
             style={styles.input}
             placeholder="example: 1-2 or 16"
