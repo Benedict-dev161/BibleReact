@@ -1,28 +1,32 @@
+import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import BookList from "../components/BookList";
-import MainLayout from "../screens/MainLayout";
 import { getChapter } from "../utils/bibleApi";
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
+  const router = useRouter(); // Inisialisasi router
+
   const handleSelectBook = async (bookKey, chapter) => {
     const data = await getChapter(bookKey, chapter);
+
     if (data?.verses) {
-      navigation.navigate("Verse", {
-        reference: data.reference,
-        verses: data.verses,
-        bookKey,
-        chapter,
+      router.push({
+        pathname: "/verse",
+        params: {
+          reference: data.reference,
+          verses: JSON.stringify(data.verses),
+          bookKey: bookKey,
+          chapter: chapter,
+        },
       });
     }
   };
 
   return (
-    <MainLayout navigation={navigation} active="Home">
-      <View style={styles.container}>
-        <BookList onSelectBook={handleSelectBook} />
-      </View>
-    </MainLayout>
+    <View style={styles.container}>
+      <BookList onSelectBook={handleSelectBook} />
+    </View>
   );
 }
 
