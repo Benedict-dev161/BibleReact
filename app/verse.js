@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -61,7 +61,6 @@ export default function VerseScreen() {
     const bookName = parts.join(" ");
     displayReference = `${bookName} ${currentChapter}`;
   }
-
 
   return (
     <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
@@ -234,5 +233,3 @@ const styles = StyleSheet.create({
   verseNum: { width: 32, fontWeight: "bold", color: "#007AFF" },
   verseText: { flex: 1, fontSize: 16, lineHeight: 24 },
 });
-
-
