@@ -69,7 +69,7 @@ export default function VerseScreen() {
             activeOpacity={0.7}
           >
             <Text style={styles.backIcon}>‹</Text>
-            <Text style={styles.backText}>Kembali</Text>
+            <Text style={styles.backText}>Back</Text>
           </TouchableOpacity>
 
           <Text numberOfLines={1} style={styles.headerTitle}>
@@ -229,3 +229,4 @@ const styles = StyleSheet.create({
   verseNum: { width: 32, fontWeight: "bold", color: "#007AFF" },
   verseText: { flex: 1, fontSize: 16, lineHeight: 24 },
 });
+
