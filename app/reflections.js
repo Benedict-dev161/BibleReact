@@ -1,4 +1,3 @@
-// screens/Reflections.js
 import { useState } from "react";
 import {
   Alert,
@@ -9,9 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MainLayout from "../screens/MainLayout";
 
-export default function Reflections({ navigation }) {
+export default function Reflections() {
   const [journalText, setJournalText] = useState("");
 
   const handleSave = () => {
@@ -19,62 +17,61 @@ export default function Reflections({ navigation }) {
       Alert.alert("Kosong", "Tuliskan sesuatu sebelum menyimpan.");
       return;
     }
+
     // Placeholder untuk logika penyimpanan data
     Alert.alert("Tersimpan", "Renungan Anda telah dicatat.");
     setJournalText("");
   };
 
   return (
-    <MainLayout navigation={navigation} active="Reflections">
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.pageTitle}>Daily Reflection</Text>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      <Text style={styles.pageTitle}>Daily Reflection</Text>
 
-        {/* Card Ayat Sorotan */}
-        <View style={styles.verseCard}>
-          <Text style={styles.verseReference}>Mazmur 119:105</Text>
-          <Text style={styles.verseText}>
-            "Firman-Mu itu pelita bagi kakiku dan terang bagi jalanku."
-          </Text>
-        </View>
+      {/* Card Ayat Sorotan */}
+      <View style={styles.verseCard}>
+        <Text style={styles.verseReference}>Mazmur 119:105</Text>
+        <Text style={styles.verseText}>
+          "Firman-Mu itu pelita bagi kakiku dan terang bagi jalanku."
+        </Text>
+      </View>
 
-        {/* Area Teks Renungan Singkat */}
-        <View style={styles.devotionalSection}>
-          <Text style={styles.devotionalTitle}>Terang di Tengah Kegelapan</Text>
-          <Text style={styles.devotionalBody}>
-            Seringkali kita bingung menentukan langkah selanjutnya dalam hidup.
-            Namun, setiap kali kita membaca firman, kita diberikan petunjuk
-            selangkah demi selangkah. Apa langkah yang sedang Anda gumulkan hari
-            ini?
-          </Text>
-        </View>
+      {/* Area Teks Renungan Singkat */}
+      <View style={styles.devotionalSection}>
+        <Text style={styles.devotionalTitle}>Terang di Tengah Kegelapan</Text>
+        <Text style={styles.devotionalBody}>
+          Seringkali kita bingung menentukan langkah selanjutnya dalam hidup.
+          Namun, setiap kali kita membaca firman, kita diberikan petunjuk
+          selangkah demi selangkah. Apa langkah yang sedang Anda gumulkan hari
+          ini?
+        </Text>
+      </View>
 
-        {/* Area Jurnal Pengguna */}
-        <View style={styles.journalSection}>
-          <Text style={styles.journalLabel}>Catatan Pribadi Anda:</Text>
-          <TextInput
-            style={styles.journalInput}
-            placeholder="Tuliskan renungan atau doa Anda hari ini..."
-            placeholderTextColor="#999"
-            multiline
-            numberOfLines={6}
-            value={journalText}
-            onChangeText={setJournalText}
-            textAlignVertical="top"
-          />
-          <TouchableOpacity
-            style={styles.saveBtn}
-            onPress={handleSave}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.saveBtnText}>Simpan Catatan</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </MainLayout>
+      {/* Area Jurnal Pengguna */}
+      <View style={styles.journalSection}>
+        <Text style={styles.journalLabel}>Catatan Pribadi Anda:</Text>
+        <TextInput
+          style={styles.journalInput}
+          placeholder="Tuliskan renungan atau doa Anda hari ini..."
+          placeholderTextColor="#999"
+          multiline
+          numberOfLines={6}
+          value={journalText}
+          onChangeText={setJournalText}
+          textAlignVertical="top"
+        />
+        <TouchableOpacity
+          style={styles.saveBtn}
+          onPress={handleSave}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.saveBtnText}>Simpan Catatan</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
