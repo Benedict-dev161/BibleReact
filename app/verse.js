@@ -14,11 +14,14 @@ import { getChapter } from "../utils/bibleApi";
 
 export default function VerseScreen() {
   const router = useRouter();
-
   const params = useLocalSearchParams();
   const { reference, verses, bookKey, chapter } = params;
 
   const parsedVerses = verses ? JSON.parse(verses) : [];
+
+  const [isSpecificVerse, setIsSpecificVerse] = useState(
+    reference ? reference.includes(":") : false,
+  );
 
   const [currentChapter, setCurrentChapter] = useState(
     chapter ? parseInt(chapter, 10) : 1,
@@ -38,6 +41,8 @@ export default function VerseScreen() {
     }
     setCurrentChapter(targetChapter);
     setLocalVerses(data.verses);
+
+    setIsSpecificVerse(false);
   };
 
   const handleNextChapter = () => {
@@ -73,7 +78,7 @@ export default function VerseScreen() {
             activeOpacity={0.7}
           >
             <Text style={styles.backIcon}>‹</Text>
-            <Text style={styles.backText}>Back</Text>
+            <Text style={styles.backText}>Kembali</Text>
           </TouchableOpacity>
 
           <Text numberOfLines={1} style={styles.headerTitle}>
@@ -83,7 +88,7 @@ export default function VerseScreen() {
           <View style={styles.rightPlaceholder} />
         </View>
 
-        {/* Isi ayat diletakkan di atas navigasi */}
+        {/* Isi Ayat */}
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.scrollContent}
@@ -96,42 +101,57 @@ export default function VerseScreen() {
           ))}
         </ScrollView>
 
-        {/* Kontrol pasal dipindah ke bawah */}
+        {/* --- PERUBAHAN UI: Render Kondisional Navigasi Bawah --- */}
         <View style={styles.chapterBar}>
-          <View style={styles.navRow}>
+          {isSpecificVerse ? (
             <TouchableOpacity
-              style={[styles.navBtn, styles.prevBtn]}
-              onPress={() => {
-                if (currentChapter > 1) {
-                  loadChapter(currentChapter - 1);
-                }
-              }}
+              style={styles.fullChapterBtn}
+              onPress={() => loadChapter(currentChapter)}
               activeOpacity={0.8}
             >
-              <Text style={styles.navText}>‹ Previous</Text>
+              <Text style={styles.fullChapterText}>
+                Back to Verse {currentChapter}
+              </Text>
             </TouchableOpacity>
+          ) : (
+            // Jika mode normal (satu pasal penuh), tampilkan navigasi standar
+            <>
+              <View style={styles.navRow}>
+                <TouchableOpacity
+                  style={[styles.navBtn, styles.prevBtn]}
+                  onPress={() => {
+                    if (currentChapter > 1) {
+                      loadChapter(currentChapter - 1);
+                    }
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.navText}>‹ Previous</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.navBtn, styles.nextBtn]}
-              onPress={handleNextChapter}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.navText}>Next›</Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  style={[styles.navBtn, styles.nextBtn]}
+                  onPress={handleNextChapter}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.navText}>Next›</Text>
+                </TouchableOpacity>
+              </View>
 
-          <View style={styles.jumpWrapper}>
-            <TextInput
-              style={styles.jumpInput}
-              placeholder="Contoh: 1, 15, 20"
-              keyboardType="numeric"
-              value={jumpChapter}
-              onChangeText={setJumpChapter}
-            />
-            <TouchableOpacity style={styles.goBtn} onPress={handleJump}>
-              <Text style={styles.goText}>GO</Text>
-            </TouchableOpacity>
-          </View>
+              <View style={styles.jumpWrapper}>
+                <TextInput
+                  style={styles.jumpInput}
+                  placeholder="Contoh: 1, 15, 20"
+                  keyboardType="numeric"
+                  value={jumpChapter}
+                  onChangeText={setJumpChapter}
+                />
+                <TouchableOpacity style={styles.goBtn} onPress={handleJump}>
+                  <Text style={styles.goText}>GO</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </SafeAreaView>
@@ -174,6 +194,21 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: "#e0e0e0",
   },
+
+  // Gaya untuk tombol Lihat Keseluruhan Pasal
+  fullChapterBtn: {
+    backgroundColor: "#007AFF",
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  fullChapterText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
   navRow: {
     flexDirection: "row",
     marginBottom: 8,
@@ -184,7 +219,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#007AFF",
   },
   prevBtn: {
     backgroundColor: "#ff0000ff",
