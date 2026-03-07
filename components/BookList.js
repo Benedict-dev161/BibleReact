@@ -6,8 +6,7 @@ import {
   View,
 } from "react-native";
 
-const bibleBooks = [
-  // OLD TESTAMENT
+const BIBLE_BOOKS = [
   { id: 1, name: "Genesis", key: "genesis" },
   { id: 2, name: "Exodus", key: "exodus" },
   { id: 3, name: "Leviticus", key: "leviticus" },
@@ -24,12 +23,12 @@ const bibleBooks = [
   { id: 14, name: "2 Chronicles", key: "2chronicles" },
   { id: 15, name: "Ezra", key: "ezra" },
   { id: 16, name: "Nehemiah", key: "nehemiah" },
-  { id: 17, name: "Esther", key: "ester" },
+  { id: 17, name: "Esther", key: "esther" },
   { id: 18, name: "Job", key: "job" },
   { id: 19, name: "Psalms", key: "psalms" },
   { id: 20, name: "Proverbs", key: "proverbs" },
   { id: 21, name: "Ecclesiastes", key: "ecclesiastes" },
-  { id: 22, name: "Song of Songs", key: "songofsolomon" },
+  { id: 22, name: "Song of Solomon", key: "songofsolomon" },
   { id: 23, name: "Isaiah", key: "isaiah" },
   { id: 24, name: "Jeremiah", key: "jeremiah" },
   { id: 25, name: "Lamentations", key: "lamentations" },
@@ -76,80 +75,84 @@ const bibleBooks = [
   { id: 66, name: "Revelation", key: "revelation" },
 ];
 
-export default function BookList({ onSelectBook, onSearchPress }) {
+export default function BookList({ onSelectBook, searchQuery = "" }) {
+  const filteredBooks = BIBLE_BOOKS.filter((book) =>
+    book.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
-      style={styles.bookItem}
-      onPress={() => onSelectBook(item.key, 1)}
+      style={styles.card}
       activeOpacity={0.7}
+      onPress={() => onSelectBook(item.key, 1)}
     >
-      <Text style={styles.bookNumber}>{item.id}</Text>
-      <View style={{ flex: 1 }}>
-        <Text style={styles.bookName}>{item.name}</Text>
+      <View style={styles.numberBadge}>
+        <Text style={styles.numberText}>{item.id}</Text>
       </View>
+      <Text style={styles.bookName}>{item.name}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.sectionTitle}>📖 BIBLE</Text>
-      <FlatList
-        data={bibleBooks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.listContainer}
-      />
-      {onSearchPress && (
-        <TouchableOpacity style={styles.searchBtn} onPress={onSearchPress}>
-          <Text style={styles.searchBtnText}>🔍 Cari Ayat/Pasal</Text>
-        </TouchableOpacity>
-      )}
-    </View>
+    <FlatList
+      data={filteredBooks}
+      keyExtractor={(item) => item.key}
+      renderItem={renderItem}
+      contentContainerStyle={styles.listContainer}
+      showsVerticalScrollIndicator={false}
+      ListEmptyComponent={
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>Kitab tidak ditemukan.</Text>
+        </View>
+      }
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    backgroundColor: "#f5f5f5",
+  listContainer: {
+    paddingHorizontal: 16,
+    paddingBottom: 24,
   },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  listContainer: { paddingBottom: 80 },
-  bookItem: {
+  card: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 14,
     backgroundColor: "white",
-    marginVertical: 5,
-    borderRadius: 10,
+    padding: 16,
+    marginBottom: 8,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
     elevation: 2,
   },
-  bookNumber: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#ecf0f1",
-    textAlign: "center",
-    textAlignVertical: "center",
-    color: "#3498db",
-    fontWeight: "bold",
-    marginRight: 10,
-  },
-  bookName: { fontSize: 16, fontWeight: "600" },
-  bookKey: { fontSize: 12, color: "#7f8c8d" },
-  searchBtn: {
-    backgroundColor: "#e74c3c",
-    padding: 16,
-    borderRadius: 10,
+  numberBadge: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "#e6f0ff",
     alignItems: "center",
-    marginTop: 10,
+    justifyContent: "center",
+    marginRight: 16,
   },
-  searchBtnText: { color: "white", fontSize: 16, fontWeight: "bold" },
+  numberText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#007AFF",
+  },
+  bookName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
+  },
+  emptyContainer: {
+    padding: 32,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 16,
+    color: "#888",
+    fontStyle: "italic",
+  },
 });
