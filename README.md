@@ -44,3 +44,9 @@ cd path/to/your/frontend/folder
 npm install
 npx expo start -c
 ```
+
+```bash
+cd path/to/your/frontend/folder
+npm install
+npm start
+```
