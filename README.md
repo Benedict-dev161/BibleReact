@@ -4,11 +4,9 @@ A full-stack mobile application built with React Native (Expo) that provides a s
 
 ## 🏗 System Architecture
 
-This project deliberately avoids the monolithic trap by separating the client-side mobile app from the data-fetching engine:
+This project deliberately avoids the monolithic trap by separating the [client-side mobile app](https://github.com/Benedict-dev161/BibleReact) from the [data-fetching engine](https://github.com/Benedict-dev161/BibleReactBe):
 * **Frontend (Mobile App):** Built with React Native & Expo Router for file-based navigation. Handles UI and state management for fluid reading.
-  ** 'https://github.com/Benedict-dev161/BibleReact'
 * **Backend (REST API):** A custom Node.js/Express server utilizing Cheerio. It acts as a lightweight proxy scraper to extract daily devotional content from `dailyscripture.net` without overwhelming the client's memory or violating CORS policies.
-  ** 'https://github.com/Benedict-dev161/BibleReactBe'
 
 ## ✨ Key Features
 
