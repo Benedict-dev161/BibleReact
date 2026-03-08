@@ -29,18 +29,12 @@ This project deliberately avoids the monolithic trap by separating the client-si
 
 ## 🚀 How to Run Locally
 
-Because this project uses a decoupled architecture, you must run both the backend server and the frontend application simultaneously.
+Because this project uses a decoupled architecture, you must run both the backend server and the frontend application simultaneously in **two separate terminal windows**.
 
 ### 1. Start the Backend API (Devotional Proxy)
+Open your first terminal window and navigate to your backend directory.
 ```bash
 cd path/to/your/backend/folder
 npm install
 node server.js
 
-**### 2. Start the Frontend (Expo Mobile App)**
-Open a second, completely separate terminal window and navigate to your frontend (React Native) directory.
-
-```bash
-cd path/to/your/frontend/folder
-npm install
-npx expo start -c
