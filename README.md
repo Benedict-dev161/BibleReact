@@ -31,12 +31,16 @@ This project deliberately avoids the monolithic trap by separating the client-si
 
 Because this project uses a decoupled architecture, you must run both the backend server and the frontend application simultaneously in **two separate terminal windows**.
 
-### 1. Start the Backend API (Devotional Proxy)
-Open your first terminal window and navigate to your backend directory.
+### 1. Start the Backend API (Terminal 1)
 ```bash
 cd path/to/your/backend/folder
 npm install
 node server.js
-```bash
+```
 
-### 1. Start the Backend API (Devotional Proxy)
+### 2. Start the Frontend (Terminal 2)
+```bash
+cd path/to/your/frontend/folder
+npm install
+npx expo start -c
+```
