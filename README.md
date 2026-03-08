@@ -37,11 +37,6 @@ Open your first terminal window and navigate to your backend directory.
 cd path/to/your/backend/folder
 npm install
 node server.js
+```bash
 
-
-# ==========================================
-# TERMINAL 2: START THE FRONTEND (EXPO)
-# ==========================================
-cd path/to/your/frontend/folder
-npm install
-npx expo start -c
+### 1. Start the Backend API (Devotional Proxy)
