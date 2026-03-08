@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -12,16 +12,65 @@ import {
 export default function Reflections() {
   const [journalText, setJournalText] = useState("");
 
+  const [devotional, setDevotional] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchDevotional();
+  }, []);
+
+  const fetchDevotional = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        "http://192.168.1.65:3000/api/daily-devotional",
+      );
+
+      const json = await response.json();
+
+      if (json.success) {
+        setDevotional(json.data);
+      } else {
+        setError("Gagal mengambil data dari server.");
+      }
+    } catch (err) {
+      console.error("Fetch error:", err);
+      setError("Server mati atau jaringan terputus.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSave = () => {
     if (!journalText.trim()) {
       Alert.alert("Kosong", "Tuliskan sesuatu sebelum menyimpan.");
       return;
     }
-
-    // Placeholder untuk logika penyimpanan data
     Alert.alert("Tersimpan", "Renungan Anda telah dicatat.");
     setJournalText("");
   };
+
+  if (loading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.loadingText}>Renungan hari ini...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity style={styles.retryBtn} onPress={fetchDevotional}>
+          <Text style={styles.retryText}>Coba Lagi</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -31,51 +80,59 @@ export default function Reflections() {
     >
       <Text style={styles.pageTitle}>Daily Reflection</Text>
 
-      {/* Card Ayat Sorotan */}
+      {/* Card Bacaan Injil (Gospel) */}
       <View style={styles.verseCard}>
-        <Text style={styles.verseReference}>Mazmur 119:105</Text>
-        <Text style={styles.verseText}>
-          "Firman-Mu itu pelita bagi kakiku dan terang bagi jalanku."
-        </Text>
+        <Text style={styles.verseReference}>Gospel Reading</Text>
+        <Text style={styles.verseText}>"{devotional?.gospel}"</Text>
       </View>
 
       {/* Area Teks Renungan Singkat */}
       <View style={styles.devotionalSection}>
-        <Text style={styles.devotionalTitle}>Terang di Tengah Kegelapan</Text>
-        <Text style={styles.devotionalBody}>
-          Seringkali kita bingung menentukan langkah selanjutnya dalam hidup.
-          Namun, setiap kali kita membaca firman, kita diberikan petunjuk
-          selangkah demi selangkah. Apa langkah yang sedang Anda gumulkan hari
-          ini?
-        </Text>
+        <Text style={styles.devotionalTitle}>Meditation</Text>
+        <Text style={styles.devotionalBody}>{devotional?.meditation}</Text>
       </View>
 
-      {/* Area Jurnal Pengguna */}
-      <View style={styles.journalSection}>
-        <Text style={styles.journalLabel}>Catatan Pribadi Anda:</Text>
-        <TextInput
-          style={styles.journalInput}
-          placeholder="Tuliskan renungan atau doa Anda hari ini..."
-          placeholderTextColor="#999"
-          multiline
-          numberOfLines={6}
-          value={journalText}
-          onChangeText={setJournalText}
-          textAlignVertical="top"
-        />
-        <TouchableOpacity
-          style={styles.saveBtn}
-          onPress={handleSave}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.saveBtnText}>Simpan Catatan</Text>
-        </TouchableOpacity>
+      {/* Card Doa Penutup */}
+      <View style={styles.prayerCard}>
+        <Text style={styles.prayerTitle}>Prayer</Text>
+        <Text style={styles.prayerText}>{devotional?.prayer}</Text>
       </View>
+
+      {/* Atribusi Hukum yang Wajib Dicantumkan */}
+      <Text style={styles.attributionText}>{devotional?.attribution}</Text>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
+    padding: 20,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: "#555",
+  },
+  errorText: {
+    fontSize: 16,
+    color: "#D32F2F",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  retryBtn: {
+    backgroundColor: "#007AFF",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  retryText: {
+    color: "white",
+    fontWeight: "bold",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
@@ -117,7 +174,7 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
   devotionalSection: {
-    marginBottom: 24,
+    marginBottom: 20,
   },
   devotionalTitle: {
     fontSize: 18,
@@ -129,6 +186,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 24,
     color: "#555",
+  },
+  prayerCard: {
+    backgroundColor: "#f0f8ff",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 24,
+  },
+  prayerTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#005bb5",
+    marginBottom: 8,
+  },
+  prayerText: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: "#333",
+    fontStyle: "italic",
   },
   journalSection: {
     marginTop: 8,
@@ -160,5 +235,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  attributionText: {
+    marginTop: 24,
+    fontSize: 11,
+    color: "#999",
+    textAlign: "center",
+    lineHeight: 16,
   },
 });
