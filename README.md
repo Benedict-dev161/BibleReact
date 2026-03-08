@@ -1,50 +1,38 @@
-# Welcome to your Expo app 👋
+# 📖 React Native Bible & Daily Devotional App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A full-stack mobile application built with React Native (Expo) that provides a seamless Bible reading experience, smart verse searching, and a daily devotional in real-time through a custom decoupled backend.
 
-## Get started
+## 🏗 System Architecture
 
-1. Install dependencies
+This project deliberately avoids the monolithic trap by separating the client-side mobile app from the data-fetching engine:
+* **Frontend (Mobile App):** Built with React Native & Expo Router for file-based navigation. Handles UI and state management for fluid reading.
+* **Backend (REST API):** A custom Node.js/Express server utilizing Cheerio. It acts as a lightweight proxy scraper to extract daily devotional content from `dailyscripture.net` without overwhelming the client's memory or violating CORS policies.
 
-   ```bash
-   npm install
-   ```
+## ✨ Key Features
 
-2. Start the app
+* **Smart Bible Reader:** Dynamic chapter navigation with absolute boundary limits (prevents navigating past the last chapter of a specific book).
+* **Precision Search Engine:** Multi-input search interface that intelligently parses Book, Chapter, and Verse, adapting the UI to "Single Verse Mode" when specific verses are requested.
+* **Real-time Daily Devotional:** Fetches daily Gospel readings, meditations, and prayers from a custom backend API seamlessly.
 
-   ```bash
-   npx expo start
-   ```
+## 🛠 Tech Stack
 
-In the output, you'll find options to open the app in a
+**Frontend:**
+* React Native
+* Expo & Expo Router (Tabs & File-based routing)
+* React Native Safe Area Context
+* Expo Vector Icons
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Backend:**
+* Node.js & Express.js
+* Axios (HTTP client for raw HTML fetching)
+* Cheerio (High-performance DOM parsing)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🚀 How to Run Locally
 
-## Get a fresh project
+Because this project uses a decoupled architecture, you must run both the backend server and the frontend application simultaneously.
 
-When you're ready, run:
-
+### 1. Start the Backend API (Devotional Proxy)
 ```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+cd path/to/your/backend/folder
+npm install
+node server.js
