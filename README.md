@@ -36,3 +36,11 @@ Because this project uses a decoupled architecture, you must run both the backen
 cd path/to/your/backend/folder
 npm install
 node server.js
+
+**### 2. Start the Frontend (Expo Mobile App)**
+Open a second, completely separate terminal window and navigate to your frontend (React Native) directory.
+
+```bash
+cd path/to/your/frontend/folder
+npm install
+npx expo start -c
