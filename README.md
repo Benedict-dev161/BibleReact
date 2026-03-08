@@ -38,3 +38,10 @@ cd path/to/your/backend/folder
 npm install
 node server.js
 
+
+# ==========================================
+# TERMINAL 2: START THE FRONTEND (EXPO)
+# ==========================================
+cd path/to/your/frontend/folder
+npm install
+npx expo start -c
