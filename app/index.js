@@ -38,7 +38,7 @@ export default function HomeScreen() {
         />
         <TextInput
           style={styles.searchInput}
-          placeholder="Cari kitab (contoh: Genesis, John)..."
+          placeholder="Search for books (e.g., Genesis, John)"
           placeholderTextColor="#999"
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     marginHorizontal: 16,
-    marginTop: 16,
+    marginTop: 30,
     marginBottom: 8,
     paddingHorizontal: 12,
     borderRadius: 10,
